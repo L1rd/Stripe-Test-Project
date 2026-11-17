@@ -2,7 +2,7 @@ import { useCallback } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { useAppSelector } from "../../../app/store/hooks";
+import { useAppSelector } from "@/app/store/hooks";
 
 import {
   selectFlowProgress,

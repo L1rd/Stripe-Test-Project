@@ -4,12 +4,12 @@ import {
   type PayloadAction,
 } from "@reduxjs/toolkit";
 
-import { ApiError } from "../../shared/api/apiClient";
+import { ApiError } from "@/shared/api/apiClient";
 import { flowApi } from "./flowApi";
 
 import type { OnboardingState, QuizAnswer } from "./onboarding.types";
 
-import type { FlowResponse } from "../../shared/api/api.types";
+import type { FlowResponse } from "@/shared/api/api.types";
 
 const initialState: OnboardingState = {
   flowName: "default",

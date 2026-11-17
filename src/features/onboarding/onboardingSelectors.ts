@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 
-import type { RootState } from "../../app/store/store";
+import type { RootState } from "@/app/store/store";
 
 import { isKnownFlowScreen, type FlowScreenKey } from "./flowRegistry";
 

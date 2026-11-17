@@ -1,4 +1,4 @@
-import { ScreenLayout } from "../../../shared/components/ScreenLayout/ScreenLayout";
+import { ScreenLayout } from "@/shared/components/ScreenLayout/ScreenLayout";
 
 interface PlaceholderScreenProps {
     title: string;

@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 
-import { useAppDispatch } from "../../../app/store/hooks";
+import { useAppDispatch } from "@/app/store/hooks";
 import { fetchFlow } from "../onboardingSlice";
 
 interface FlowBootstrapProps {
