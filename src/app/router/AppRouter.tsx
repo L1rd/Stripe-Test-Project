@@ -17,9 +17,11 @@ import {
 
 import { fetchFlow } from "@/features/onboarding/onboardingSlice";
 
-import { isKnownFlowScreen } from "@/features/onboarding/flowRegistry";
+import { isKnownFlowScreen } from "@/app/router/flowRegistry";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { SCREEN_REGISTRY } from "@/features/onboarding/screenRegistry";
+import { SCREEN_REGISTRY } from "@/app/router/screenRegistry";
+import { fetchPaymentStatus } from "@/features/checkout/checkoutSlice";
+import { useEffect, useState } from "react";
 
 function FlowStatusView() {
     const dispatch = useAppDispatch();
@@ -115,7 +117,81 @@ function FlowStepResolver() {
 
     const Screen = SCREEN_REGISTRY[step];
 
+    if (step === "success") {
+        return (
+            <SuccessRouteGuard>
+                <Screen />
+            </SuccessRouteGuard>
+        );
+    }
+
     return <Screen />;
+}
+
+function SuccessRouteGuard({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    const dispatch = useAppDispatch();
+
+    const paymentId = useAppSelector(
+        (state) => state.checkout.paymentId,
+    );
+
+    const paymentStatus = useAppSelector(
+        (state) => state.checkout.paymentStatus,
+    );
+
+    const paymentStatusCheckError = useAppSelector(
+        (state) => state.checkout.paymentStatusCheckError,
+    );
+
+    const [isChecking, setIsChecking] = useState(true);
+    const [retryCount, setRetryCount] = useState(0);
+
+    useEffect(() => {
+        if (!paymentId) {
+            return;
+        }
+
+        void dispatch(fetchPaymentStatus(paymentId)).finally(() => {
+            setIsChecking(false);
+        });
+    }, [dispatch, paymentId, retryCount]);
+
+    if (!paymentId) {
+        return <Navigate to="/checkout" replace />;
+    }
+
+    if (isChecking) {
+        return <p>Перевіряємо статус платежу...</p>;
+    }
+
+    if (paymentStatusCheckError) {
+        return (
+            <main>
+                <h1>Не вдалося перевірити оплату</h1>
+                <p>{paymentStatusCheckError}</p>
+
+                <button
+                    type="button"
+                    onClick={() => {
+                        setIsChecking(true);
+                        setRetryCount((count) => count + 1);
+                    }}
+                >
+                    Спробувати ще раз
+                </button>
+            </main>
+        );
+    }
+
+    if (paymentStatus !== "succeeded") {
+        return <Navigate to="/checkout" replace />;
+    }
+
+    return <>{children}</>;
 }
 
 export function AppRouter() {

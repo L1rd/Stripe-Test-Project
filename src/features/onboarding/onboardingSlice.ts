@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 
 import { ApiError } from "@/shared/api/apiClient";
-import { flowApi } from "./flowApi";
+import { flowApi } from "./api/flowApi";
 
 import type { OnboardingState, QuizAnswer } from "./onboarding.types";
 

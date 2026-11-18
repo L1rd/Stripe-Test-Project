@@ -56,6 +56,8 @@ export const store = configureStore({
     }),
 });
 
+console.log("[Redux] Initial checkout state:", store.getState().checkout);
+
 export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -26,3 +26,30 @@ export interface PlanResponse {
 export interface PlansResponse {
   plans: PlanResponse[];
 }
+
+export interface CreatePaymentRequest {
+  planId: string;
+  email: string;
+  phone: string;
+}
+
+export type PaymentStatus =
+  | "requires_payment_method"
+  | "requires_action"
+  | "processing"
+  | "succeeded"
+  | "canceled";
+
+export interface PaymentResponse {
+  id: string;
+  status: PaymentStatus;
+  planId: string | null;
+  amount: number;
+  currency: string;
+  errorMessage: string | null;
+}
+
+export interface CreatePaymentResponse extends PaymentResponse {
+  clientSecret: string;
+}
+

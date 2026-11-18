@@ -1,3 +1,5 @@
+import type { PaymentStatus } from "@/shared/api/api.types";
+
 export type FlowStep = string;
 
 export type FlowStatus = "idle" | "loading" | "succeeded" | "failed";
@@ -18,3 +20,12 @@ export interface OnboardingState {
 
   quizAnswers: Record<string, QuizAnswer>;
 }
+
+
+export type PlansStatus = "idle" | "loading" | "succeeded" | "failed";
+
+export type PaymentProcessStatus =
+  | "idle"
+  | "creating"
+  | "error"
+  | PaymentStatus;

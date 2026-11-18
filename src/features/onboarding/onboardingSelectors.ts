@@ -2,7 +2,10 @@ import { createSelector } from "@reduxjs/toolkit";
 
 import type { RootState } from "@/app/store/store";
 
-import { isKnownFlowScreen, type FlowScreenKey } from "./flowRegistry";
+import {
+  isKnownFlowScreen,
+  type FlowScreenKey,
+} from "../../app/router/flowRegistry";
 
 const selectRawFlow = (state: RootState) => state.onboarding.flow;
 

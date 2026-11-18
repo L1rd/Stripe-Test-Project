@@ -9,7 +9,7 @@ import {
   selectSupportedFlow,
 } from "../onboardingSelectors";
 
-import type { FlowScreenKey } from "../flowRegistry";
+import type { FlowScreenKey } from "../../../app/router/flowRegistry";
 
 export function useFlowNavigation() {
   const navigate = useNavigate();
