@@ -85,9 +85,7 @@ const onboardingSlice = createSlice({
         answer: QuizAnswer;
       }>,
     ) => {
-      const { questionId, answer } = action.payload;
-
-      state.quizAnswers[questionId] = answer;
+      state.quizAnswers[action.payload.questionId] = action.payload.answer;
     },
 
     resetOnboarding: () => initialState,

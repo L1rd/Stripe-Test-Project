@@ -11,9 +11,14 @@ import {
   REHYDRATE,
 } from "redux-persist";
 
+import onboardingReducer from "@/features/onboarding/onboardingSlice";
+import checkoutReducer from "@/features/checkout/checkoutSlice";
+
 import { persistConfig } from "./persistConfig";
 
 const rootReducer = combineReducers({
+  onboarding: onboardingReducer,
+  checkout: checkoutReducer,
 });
 
 const storage = {

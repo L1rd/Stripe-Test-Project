@@ -5,14 +5,8 @@ import type { FlowScreenKey } from "./flowRegistry";
 import { PhoneScreen } from "./screens/PhoneScreen/PhoneScreen";
 import { EmailScreen } from "./screens/EmailScreen/EmailScreen";
 import { PlaceholderScreen } from "./screens/PlaceholderScreen";
-
-const QuizSingleScreen = () => (
-    <PlaceholderScreen title="Single choice quiz" />
-);
-
-const QuizMultiScreen = () => (
-    <PlaceholderScreen title="Multiple choice quiz" />
-);
+import { QuizSingleScreen } from "./screens/QuizSingleScreen/QuizSingleScreen";
+import { QuizMultiScreen } from "./screens/QuizMultiScreen/QuizMultiScreen";
 
 const CheckoutScreen = () => (
     <PlaceholderScreen title="Checkout" />
