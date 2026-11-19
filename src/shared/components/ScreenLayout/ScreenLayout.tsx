@@ -11,6 +11,7 @@ import {
     Title,
 } from "./ScreenLayout.styles";
 import { useFlowNavigation } from "@/features/onboarding/hooks/useFlowNavigation";
+import { useTranslation } from "react-i18next";
 
 
 interface ScreenLayoutProps {
@@ -25,12 +26,13 @@ export function ScreenLayout({
     children,
 }: ScreenLayoutProps) {
     const { progress } = useFlowNavigation();
+    const { t } = useTranslation();
 
     return (
         <Page>
             <Card>
                 <ProgressLabel>
-                    <span>YOUR PROGRESS</span>
+                    <span>{t('screenLayout.progressLabel')}</span>
                     <span>
                         {progress.current} / {progress.total}
                     </span>

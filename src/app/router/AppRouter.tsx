@@ -1,4 +1,3 @@
-
 import {
     Navigate,
     Route,
@@ -6,7 +5,9 @@ import {
     useLocation,
     useParams,
 } from "react-router-dom";
-
+import { Suspense, useEffect, useState } from "react";
+import styled from "styled-components";
+import { useTranslation } from "react-i18next";
 
 import {
     selectFlowError,
@@ -16,40 +17,121 @@ import {
 } from "@/features/onboarding/onboardingSelectors";
 
 import { fetchFlow } from "@/features/onboarding/onboardingSlice";
-
 import { isKnownFlowScreen } from "@/app/router/flowRegistry";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { SCREEN_REGISTRY } from "@/app/router/screenRegistry";
 import { fetchPaymentStatus } from "@/features/checkout/checkoutSlice";
-import { useEffect, useState } from "react";
+import { preloadScreen } from "./screenPreloader";
+import { ScreenLoader } from "@/shared/components/ScreenLoader/ScreenLoader";
+
+// Styled components
+
+const StatusPage = styled.main`
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+`;
+
+const StatusContent = styled.div`
+    width: 100%;
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+`;
+
+const StatusTitle = styled.h1`
+    margin: 0;
+    color: ${({ theme }) => theme.colors.text};
+
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.3;
+`;
+
+const StatusText = styled.p`
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #777;
+`;
+
+const ErrorText = styled(StatusText)`
+    color: #dc4545;
+`;
+
+const RetryButton = styled.button`
+    min-height: 48px;
+    padding: 0 28px;
+    border: none;
+    border-radius: 12px;
+    background: #222;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+        opacity: 0.85;
+    }
+
+    &:focus-visible {
+        outline: 2px solid #555;
+        outline-offset: 3px;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+`;
 
 function FlowStatusView() {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
 
     const status = useAppSelector(selectFlowStatus);
     const error = useAppSelector(selectFlowError);
     const flowName = useAppSelector(selectFlowName);
 
     if (status === "loading" || status === "idle") {
-        return <p>Завантаження онбордингу...</p>;
+        return (
+            <StatusPage>
+                <StatusContent>
+                    <StatusText role="status" aria-live="polite">
+                        {t("common.loading")}
+                    </StatusText>
+                </StatusContent>
+            </StatusPage>
+        );
     }
 
     if (status === "failed") {
         return (
-            <main>
-                <h1>Не вдалося завантажити онбординг</h1>
+            <StatusPage>
+                <StatusContent>
+                    <StatusTitle>
+                        {t("errors.loadFlow")}
+                    </StatusTitle>
 
-                <p>{error}</p>
+                    {error && <ErrorText>{error}</ErrorText>}
 
-                <button
-                    type="button"
-                    onClick={() => {
-                        void dispatch(fetchFlow(flowName));
-                    }}
-                >
-                    Спробувати ще раз
-                </button>
-            </main>
+                    <RetryButton
+                        type="button"
+                        onClick={() => {
+                            void dispatch(fetchFlow(flowName));
+                        }}
+                    >
+                        {t("common.retry")}
+                    </RetryButton>
+                </StatusContent>
+            </StatusPage>
         );
     }
 
@@ -57,6 +139,8 @@ function FlowStatusView() {
 }
 
 function FlowEntryRedirect() {
+    const { t } = useTranslation();
+
     const flow = useAppSelector(selectSupportedFlow);
     const status = useAppSelector(selectFlowStatus);
 
@@ -69,7 +153,13 @@ function FlowEntryRedirect() {
     const firstStep = flow[0];
 
     if (!firstStep) {
-        return <p>У цьому сценарії немає доступних екранів.</p>;
+        return (
+            <StatusPage>
+                <StatusContent>
+                    <StatusText>{t("router.emptyFlow")}</StatusText>
+                </StatusContent>
+            </StatusPage>
+        );
     }
 
     return (
@@ -84,6 +174,7 @@ function FlowEntryRedirect() {
 }
 
 function FlowStepResolver() {
+    const { t } = useTranslation();
     const { step } = useParams();
 
     const flow = useAppSelector(selectSupportedFlow);
@@ -91,12 +182,31 @@ function FlowStepResolver() {
 
     const location = useLocation();
 
+    useEffect(() => {
+        if (!step || !isKnownFlowScreen(step)) {
+            return;
+        }
+
+        const currentIndex = flow.indexOf(step);
+        const nextStep = flow[currentIndex + 1];
+
+        if (nextStep) {
+            preloadScreen(nextStep);
+        }
+    }, [step, flow]);
+
     if (status !== "succeeded") {
         return <FlowStatusView />;
     }
 
     if (!flow.length) {
-        return <p>У цьому сценарії немає доступних екранів.</p>;
+        return (
+            <StatusPage>
+                <StatusContent>
+                    <StatusText>{t("router.emptyFlow")}</StatusText>
+                </StatusContent>
+            </StatusPage>
+        );
     }
 
     if (
@@ -117,16 +227,24 @@ function FlowStepResolver() {
 
     const Screen = SCREEN_REGISTRY[step];
 
+    const screenElement = (
+        <Suspense fallback={<ScreenLoader />}>
+            <Screen />
+        </Suspense>
+    );
+
     if (step === "success") {
         return (
             <SuccessRouteGuard>
-                <Screen />
+                {screenElement}
             </SuccessRouteGuard>
         );
     }
 
-    return <Screen />;
+    return screenElement;
 }
+
+// Success route guard
 
 function SuccessRouteGuard({
     children,
@@ -134,6 +252,7 @@ function SuccessRouteGuard({
     children: React.ReactNode;
 }) {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
 
     const paymentId = useAppSelector(
         (state) => state.checkout.paymentId,
@@ -165,25 +284,40 @@ function SuccessRouteGuard({
     }
 
     if (isChecking) {
-        return <p>Перевіряємо статус платежу...</p>;
+        return (
+            <StatusPage>
+                <StatusContent>
+                    <StatusText role="status" aria-live="polite">
+                        {t("checkout.payment.status.verifying")}
+                    </StatusText>
+                </StatusContent>
+            </StatusPage>
+        );
     }
 
     if (paymentStatusCheckError) {
         return (
-            <main>
-                <h1>Не вдалося перевірити оплату</h1>
-                <p>{paymentStatusCheckError}</p>
+            <StatusPage>
+                <StatusContent>
+                    <StatusTitle>
+                        {t("errors.loadPayment")}
+                    </StatusTitle>
 
-                <button
-                    type="button"
-                    onClick={() => {
-                        setIsChecking(true);
-                        setRetryCount((count) => count + 1);
-                    }}
-                >
-                    Спробувати ще раз
-                </button>
-            </main>
+                    <ErrorText>
+                        {paymentStatusCheckError}
+                    </ErrorText>
+
+                    <RetryButton
+                        type="button"
+                        onClick={() => {
+                            setIsChecking(true);
+                            setRetryCount((count) => count + 1);
+                        }}
+                    >
+                        {t("common.retry")}
+                    </RetryButton>
+                </StatusContent>
+            </StatusPage>
         );
     }
 
@@ -193,6 +327,8 @@ function SuccessRouteGuard({
 
     return <>{children}</>;
 }
+
+// App router
 
 export function AppRouter() {
     return (

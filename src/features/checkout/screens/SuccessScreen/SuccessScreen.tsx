@@ -6,8 +6,11 @@ import {
     SuccessTitle,
     SuccessDescription,
 } from "./SuccessScreen.styles";
+import { useTranslation } from "react-i18next";
 
 export const SuccessScreen = () => {
+    const { t } = useTranslation('checkout');
+
     return (
         <ScreenLayout title={""}>
             <SuccessContainer>
@@ -16,12 +19,11 @@ export const SuccessScreen = () => {
                 </SuccessIcon>
 
                 <SuccessTitle>
-                    Payment successful!
+                    {t('payment.successful')}
                 </SuccessTitle>
 
                 <SuccessDescription>
-                    Thank you for your payment. Your transaction has been
-                    successfully completed.
+                    {t('payment.successfulDescription')}
                 </SuccessDescription>
             </SuccessContainer>
         </ScreenLayout>

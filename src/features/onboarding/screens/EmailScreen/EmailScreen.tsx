@@ -14,14 +14,17 @@ import { Button } from "@/shared/components/Button/Button";
 import { Input } from "@/shared/components/Input/Input";
 
 import { Form } from "@/shared/components/ScreenLayout/ScreenLayout.styles";
-
-const emailSchema = z
-    .string()
-    .trim()
-    .email("Введіть коректну email-адресу");
+import { useTranslation } from "react-i18next";
 
 export function EmailScreen() {
     const dispatch = useAppDispatch();
+    const { t: onboarding } = useTranslation('onboarding');
+    const { t: general } = useTranslation();
+
+    const emailSchema = z
+        .string()
+        .trim()
+        .email(onboarding('email.invalid'));
 
     const email = useAppSelector(selectEmail);
 
@@ -53,8 +56,8 @@ export function EmailScreen() {
 
     return (
         <ScreenLayout
-            title="What's your email?"
-            description="Enter your email address to continue."
+            title={onboarding('email.title')}
+            description={onboarding('email.description')}
         >
             <Form onSubmit={handleSubmit}>
                 <div>
@@ -78,7 +81,7 @@ export function EmailScreen() {
                     fullWidth
                     disabled={!validation.success}
                 >
-                    Continue
+                    {general('common.continue')}
                 </Button>
             </Form>
         </ScreenLayout>

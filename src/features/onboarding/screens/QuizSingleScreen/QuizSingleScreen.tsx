@@ -7,9 +7,12 @@ import { SINGLE_QUESTION } from "../quizQuestions";
 import { useFlowNavigation } from "../../hooks/useFlowNavigation";
 import { setQuizAnswer } from "../../onboardingSlice";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { useTranslation } from "react-i18next";
 
 export function QuizSingleScreen() {
     const dispatch = useAppDispatch();
+    const { t: general } = useTranslation()
+    const { t: onboarding } = useTranslation('onboarding')
 
     const savedAnswer = useAppSelector(
         (state) => state.onboarding.quizAnswers[SINGLE_QUESTION.id]
@@ -37,8 +40,8 @@ export function QuizSingleScreen() {
 
     return (
         <ScreenLayout
-            title={SINGLE_QUESTION.title}
-            description={SINGLE_QUESTION.description}
+            title={onboarding('quizSingle.title')}
+            description={onboarding('quizSingle.description')}
         >
             <ChoiceGroup
                 mode="single"
@@ -54,7 +57,7 @@ export function QuizSingleScreen() {
                 onClick={handleContinue}
                 style={{ marginTop: '30px' }}
             >
-                Continue
+                {general('common.continue')}
             </Button>
         </ScreenLayout>
     );

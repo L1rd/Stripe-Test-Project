@@ -40,7 +40,7 @@ export const fetchFlow = createAsyncThunk<
         return rejectWithValue(error.message);
       }
 
-      return rejectWithValue("Не вдалося завантажити сценарій онбордингу.");
+      return rejectWithValue("errors.loadFlow");
     }
   },
   {
@@ -109,7 +109,7 @@ const onboardingSlice = createSlice({
       .addCase(fetchFlow.rejected, (state, action) => {
         state.flowStatus = "failed";
         state.flowError =
-          action.payload ?? "Не вдалося завантажити сценарій онбордингу.";
+          action.payload ?? "errors.loadFlow";
       });
   },
 });

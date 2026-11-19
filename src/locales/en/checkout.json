@@ -1,0 +1,47 @@
+{
+    "title": "Choose your plan",
+    "description": "Select the subscription plan that works best for you.",
+    "loading": "Loading available plans...",
+    "noPlans": "No subscription plans are currently available.",
+    "errors": {
+        "loadPlans": "Unable to load subscription plans.",
+        "loadConfig": "Unable to load payment configuration.",
+        "loadPayment": "Unable to verify payment status.",
+        "confirm": "Payment could not be completed.",
+        "failed": "The payment was not completed. Please try another payment method.",
+        "canceled": "This payment was canceled.",
+        "verify": "Unable to verify the payment status. Please try again."
+    },
+    "status": {
+        "processing": "Your payment is being processed. Please wait.",
+        "requiresAction": "Additional payment verification is required.",
+        "verifying": "The payment status is being verified. Please try again shortly."
+    },
+    "retry": "Try again",
+    "popular": "Most popular",
+    "plan": {
+        "selected": "Selected",
+        "select": "Select plan",
+        "selectedLabel": "Selected plan: {{name}}"
+    },
+    "contact": {
+        "title": "Contact details",
+        "description": "Your contact details will be used to create your payment.",
+        "email": "Email",
+        "phone": "Phone",
+        "notProvided": "Not provided"
+    },
+    "validation": {
+        "email": "Please provide a valid email address.",
+        "phone": "Please provide a valid phone number in international format.",
+        "plan": "Please select a subscription plan."
+    },
+    "payment": {
+        "creating": "Creating payment...",
+        "continue": "Continue to payment",
+        "processing": "Processing payment...",
+        "payNow": "Pay Now",
+        "successful": "Payment successful!",
+        "successfulDescription": "Thank you for your payment. Your transaction has been successfully completed."
+    }
+}

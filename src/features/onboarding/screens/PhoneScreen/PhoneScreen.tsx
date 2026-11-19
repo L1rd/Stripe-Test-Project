@@ -30,6 +30,7 @@ import { Button } from "@/shared/components/Button/Button";
 import { Input } from "@/shared/components/Input/Input";
 
 import { ErrorText, Form } from "@/shared/components/ScreenLayout/ScreenLayout.styles";
+import { useTranslation } from "react-i18next";
 
 const countries = getCountries().sort((a, b) =>
     a.localeCompare(b),
@@ -66,27 +67,10 @@ const FieldLabel = styled.label`
   font-weight: 600;
 `;
 
-function getPhoneSchema(country: CountryCode) {
-    return z
-        .string()
-        .min(1, "Введіть номер телефону")
-        .refine(
-            (value) => {
-                const phoneNumber = parsePhoneNumberFromString(
-                    value,
-                    country,
-                );
-
-                return phoneNumber?.isValid() ?? false;
-            },
-            {
-                message: "Введіть коректний номер телефону",
-            },
-        );
-}
-
 export function PhoneScreen() {
     const dispatch = useAppDispatch();
+    const { t: onboarding } = useTranslation('onboarding');
+    const { t: general } = useTranslation();
 
     const phoneInput = useAppSelector(selectPhoneInput);
     const savedCountry = useAppSelector(selectPhoneCountry);
@@ -101,7 +85,22 @@ export function PhoneScreen() {
         ? (savedCountry as CountryCode)
         : "UA";
 
-    const phoneSchema = getPhoneSchema(country);
+    const phoneSchema = z
+        .string()
+        .min(1, onboarding('phone.valid'))
+        .refine(
+            (value) => {
+                const phoneNumber = parsePhoneNumberFromString(
+                    value,
+                    country,
+                );
+
+                return phoneNumber?.isValid() ?? false;
+            },
+            {
+                message: onboarding('phone.invalid'),
+            },
+        )
 
     const validation = phoneSchema.safeParse(phoneInput);
 
@@ -163,12 +162,12 @@ export function PhoneScreen() {
 
     return (
         <ScreenLayout
-            title="What's your phone number?"
-            description="Enter your phone number to continue."
+            title={onboarding('phone.title')}
+            description={onboarding('phone.description')}
         >
             <Form onSubmit={handleSubmit}>
                 <div>
-                    <FieldLabel htmlFor="phone">Phone number</FieldLabel>
+                    <FieldLabel htmlFor="phone">{onboarding('phone.placeholder')}</FieldLabel>
 
                     <PhoneInputGroup>
                         <CountrySelect
@@ -206,7 +205,7 @@ export function PhoneScreen() {
                     fullWidth
                     disabled={!validation.success || !phoneNumber?.isValid()}
                 >
-                    Continue
+                    {general('common.continue')}
                 </Button>
             </Form>
         </ScreenLayout>

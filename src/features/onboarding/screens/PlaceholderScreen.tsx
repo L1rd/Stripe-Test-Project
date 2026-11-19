@@ -1,4 +1,5 @@
 import { ScreenLayout } from "@/shared/components/ScreenLayout/ScreenLayout";
+import { useTranslation } from "react-i18next";
 
 interface PlaceholderScreenProps {
     title: string;
@@ -7,10 +8,12 @@ interface PlaceholderScreenProps {
 export function PlaceholderScreen({
     title,
 }: PlaceholderScreenProps) {
+    const { t } = useTranslation();
+
     return (
         <ScreenLayout
             title={title}
-            description="This screen will be implemented soon."
+            description={t('placeholder.description')}
         >
             <p>{title}</p>
         </ScreenLayout>

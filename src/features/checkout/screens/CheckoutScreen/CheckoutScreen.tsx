@@ -48,6 +48,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { PaymentForm } from "../../components/PaymentForm/PaymentForm";
 import { useFlowNavigation } from "@/features/onboarding/hooks/useFlowNavigation";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export const CheckoutScreen = () => {
   const dispatch = useAppDispatch();
@@ -77,6 +78,8 @@ export const CheckoutScreen = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [searchParams] = useSearchParams();
   const { navigateToStep } = useFlowNavigation();
+  const { t } = useTranslation('checkout');
+  const { t: general } = useTranslation('')
 
   const returnedPaymentId = searchParams.get("payment_intent");
   const redirectStatus = searchParams.get("redirect_status");
@@ -231,12 +234,12 @@ export const CheckoutScreen = () => {
 
   return (
     <ScreenLayout
-      title="Choose your plan"
-      description="Select the subscription plan that works best for you."
+      title={t('title')}
+      description={t('description')}
     >
       {isLoading && plans.length === 0 && (
         <StatusMessage>
-          Loading available plans...
+          {t('loading')}
         </StatusMessage>
       )}
 
@@ -250,7 +253,7 @@ export const CheckoutScreen = () => {
             type="button"
             onClick={handleRetry}
           >
-            Try again
+            {t('retry')}
           </RetryButton>
         </ErrorContainer>
       )}
@@ -269,7 +272,7 @@ export const CheckoutScreen = () => {
               >
                 {plan.popular && (
                   <PopularBadge>
-                    Most popular
+                    {t('popular')}
                   </PopularBadge>
                 )}
 
@@ -286,7 +289,7 @@ export const CheckoutScreen = () => {
                 )}
 
                 <SelectIndicator $selected={isSelected}>
-                  {isSelected ? "Selected" : "Select plan"}
+                  {isSelected ? t('plan.selected') : t('plan.select')}
                 </SelectIndicator>
               </PlanCard>
             );
@@ -296,7 +299,7 @@ export const CheckoutScreen = () => {
 
       {plansStatus === "succeeded" && plans.length === 0 && (
         <StatusMessage>
-          No subscription plans are currently available.
+          {t('noPlans')}
         </StatusMessage>
       )}
 
@@ -305,43 +308,43 @@ export const CheckoutScreen = () => {
           {!hasPayment && (
             <Form onSubmit={handleCreatePayment}>
               <Header>
-                <Title>Contact details</Title>
+                <Title>{t('contact.title')}</Title>
 
                 <Description>
-                  Your contact details will be used to create your payment.
+                  {t('contact.description')}
                 </Description>
               </Header>
 
               <div>
-                <Description>Email</Description>
-                <strong>{email || "Not provided"}</strong>
+                <Description>{t('contact.email')}</Description>
+                <strong>{email || t('contact.notProvided')}</strong>
               </div>
 
               <div>
-                <Description>Phone</Description>
-                <strong>{phone || "Not provided"}</strong>
+                <Description>{t('contact.phone')}</Description>
+                <strong>{phone || t('contact.notProvided')}</strong>
               </div>
 
               {hasSubmitted && !isValidEmail && (
                 <FormErrorText>
-                  Please provide a valid email address.
+                  {t('validation.email')}
                 </FormErrorText>
               )}
 
               {hasSubmitted && !isValidPhone && (
                 <FormErrorText>
-                  Please provide a valid phone number in international format.
+                  {t('validation.phone')}
                 </FormErrorText>
               )}
 
               {hasSubmitted && !selectedPlanId && (
                 <FormErrorText>
-                  Please select a subscription plan.
+                  {t('validation.phone')}
                 </FormErrorText>
               )}
 
               {paymentError && (
-                <FormErrorText>{paymentError}</FormErrorText>
+                <FormErrorText>{general(paymentError, { defaultValue: paymentError })}</FormErrorText>
               )}
 
               <Button
@@ -350,8 +353,8 @@ export const CheckoutScreen = () => {
                 disabled={!canCreatePayment}
               >
                 {isCreatingPayment
-                  ? "Creating payment..."
-                  : "Continue to payment"}
+                  ? t('payment.creating')
+                  : t('payment.continue')}
               </Button>
             </Form>
           )}
@@ -375,7 +378,9 @@ export const CheckoutScreen = () => {
 
       {selectedPlan && (
         <StatusMessage>
-          Selected plan: {selectedPlan.name}
+          {t("plan.selectedLabel", {
+            name: selectedPlan.name,
+          })}
         </StatusMessage>
       )}
     </ScreenLayout>

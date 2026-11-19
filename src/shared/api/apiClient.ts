@@ -29,7 +29,7 @@ export async function apiRequest<T>(
     });
   } catch {
     throw new ApiError(
-      "Не вдалося з'єднатися із сервером. Перевірте підключення.",
+      "Unable to connect to the server. Please check your connection.",
       0,
       "network_error",
     );

@@ -1,0 +1,39 @@
+{
+    "common": {
+        "continue": "Continue",
+        "back": "Back",
+        "submit": "Submit",
+        "loading": "Loading...",
+        "retry": "Try again",
+        "cancel": "Cancel"
+    },
+    "router": {
+        "emptyFlow": "There are no available screens in this flow."
+    },
+    "placeholder": {
+        "description": "This screen will be implemented soon."
+    },
+    "screenLayout": {
+        "progressLabel": "YOUR PROGRESS"
+    },
+    "success": {
+        "title": "Payment successful!",
+        "description": "Thank you for your payment. Your transaction has been successfully completed.",
+        "backToStart": "Back to start"
+    },
+    "loader": {
+        "title": "Almost there",
+        "message": "Preparing your next step..."
+    },
+    "errors": {
+        "loadFlow": "Unable to load onboarding.",
+        "loadPayment": "Unable to verify payment status."
+    },
+    "checkout": {
+        "payment": {
+            "status": {
+                "verifying": "The payment status is being verified. Please try again shortly."
+            }
+        }
+    }
+}

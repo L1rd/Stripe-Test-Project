@@ -1,9 +1,9 @@
 
+import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 
 export interface ChoiceOption {
     value: string;
-    label: string;
 }
 
 interface BaseProps {
@@ -65,6 +65,8 @@ const OptionButton = styled.button<{ $selected: boolean }>`
 `;
 
 export function ChoiceGroup(props: ChoiceGroupProps) {
+    const { t } = useTranslation('onboarding')
+
     const isSelected = (optionValue: string): boolean => {
         if (props.mode === "single") {
             return props.value === optionValue;
@@ -104,7 +106,7 @@ export function ChoiceGroup(props: ChoiceGroupProps) {
                         aria-checked={selected}
                         onClick={() => handleSelect(option.value)}
                     >
-                        {option.label}
+                        {t(`${props.mode === "single" ? "quizSingle" : "quizMulti"}.options.${option.value}`)}
                     </OptionButton>
                 );
             })}

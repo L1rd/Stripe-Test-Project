@@ -1,0 +1,35 @@
+{
+    "phone": {
+        "title": "What is your phone number?",
+        "description": "We will use your phone number to keep you updated.",
+        "placeholder": "Phone number",
+        "invalid": "Please enter a valid phone number",
+        "valid": "Enter your phone number"
+    },
+    "email": {
+        "title": "What is your email address?",
+        "description": "Enter your email address to continue.",
+        "placeholder": "Email address",
+        "invalid": "Please enter a valid email address"
+    },
+    "quizSingle": {
+        "title": "What is your main goal?",
+        "description": "Choose the option that best describes you.",
+        "options": {
+            "health": "Improve my health",
+            "fitness": "Get in better shape",
+            "energy": "Have more energy",
+            "habits": "Build healthier habits"
+        }
+    },
+    "quizMulti": {
+        "title": "What would you like to improve?",
+        "description": "Select all options that apply.",
+        "options": {
+            "nutrition": "Nutrition",
+            "sleep": "Sleep quality",
+            "activity": "Physical activity",
+            "stress": "Stress management"
+        }
+    }
+}

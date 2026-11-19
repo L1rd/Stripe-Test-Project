@@ -1,22 +1,39 @@
-import type { ComponentType } from "react";
+import { lazy, type ComponentType, type LazyExoticComponent } from "react";
 
 import type { FlowScreenKey } from "@/app/router/flowRegistry";
 
-import { PhoneScreen } from "@/features/onboarding/screens/PhoneScreen/PhoneScreen";
-import { EmailScreen } from "@/features/onboarding/screens/EmailScreen/EmailScreen";
-import { QuizSingleScreen } from "@/features/onboarding/screens/QuizSingleScreen/QuizSingleScreen";
-import { QuizMultiScreen } from "@/features/onboarding/screens/QuizMultiScreen/QuizMultiScreen";
-import { CheckoutScreen } from "@/features/checkout/screens/CheckoutScreen/CheckoutScreen";
-import { SuccessScreen } from "@/features/checkout/screens/SuccessScreen/SuccessScreen";
-
 export const SCREEN_REGISTRY: Record<
     FlowScreenKey,
-    ComponentType
+    LazyExoticComponent<ComponentType>
 > = {
-    phone: PhoneScreen,
-    email: EmailScreen,
-    quiz_single: QuizSingleScreen,
-    quiz_multi: QuizMultiScreen,
-    checkout: CheckoutScreen,
-    success: SuccessScreen,
+    phone: lazy(() =>
+        import("@/features/onboarding/screens/PhoneScreen/PhoneScreen").then(
+            (module) => ({ default: module.PhoneScreen }),
+        ),
+    ),
+    email: lazy(() =>
+        import("@/features/onboarding/screens/EmailScreen/EmailScreen").then(
+            (module) => ({ default: module.EmailScreen }),
+        ),
+    ),
+    quiz_single: lazy(() =>
+        import("@/features/onboarding/screens/QuizSingleScreen/QuizSingleScreen").then(
+            (module) => ({ default: module.QuizSingleScreen }),
+        ),
+    ),
+    quiz_multi: lazy(() =>
+        import("@/features/onboarding/screens/QuizMultiScreen/QuizMultiScreen").then(
+            (module) => ({ default: module.QuizMultiScreen }),
+        ),
+    ),
+    checkout: lazy(() =>
+        import("@/features/checkout/screens/CheckoutScreen/CheckoutScreen").then(
+            (module) => ({ default: module.CheckoutScreen }),
+        ),
+    ),
+    success: lazy(() =>
+        import("@/features/checkout/screens/SuccessScreen/SuccessScreen").then(
+            (module) => ({ default: module.SuccessScreen }),
+        ),
+    ),
 };

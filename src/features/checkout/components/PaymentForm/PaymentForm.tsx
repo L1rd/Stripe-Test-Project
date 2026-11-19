@@ -22,6 +22,7 @@ import {
     PaymentFormContainer,
     PaymentMessage,
 } from "./PaymentForm.styles";
+import { useTranslation } from "react-i18next";
 
 interface PaymentFormProps {
     paymentId: string;
@@ -33,6 +34,7 @@ export const PaymentForm = ({ paymentId }: PaymentFormProps) => {
 
     const dispatch = useAppDispatch();
     const { navigateToStep } = useFlowNavigation();
+    const { t } = useTranslation('checkout');
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -80,34 +82,34 @@ export const PaymentForm = ({ paymentId }: PaymentFormProps) => {
 
                 case "processing":
                     setStatusMessage(
-                        "Your payment is being processed. Please wait.",
+                        t('status.processing'),
                     );
                     return;
 
                 case "requires_payment_method":
                     setErrorMessage(
-                        "The payment was not completed. Please try another payment method.",
+                        t('errors.failed'),
                     );
                     return;
 
                 case "requires_action":
                     setStatusMessage(
-                        "Additional payment verification is required.",
+                        t('status.requiresAction'),
                     );
                     return;
 
                 case "canceled":
-                    setErrorMessage("This payment was canceled.");
+                    setErrorMessage(t('errors.canceled'));
                     return;
 
                 default:
                     setStatusMessage(
-                        "The payment status is being verified. Please try again shortly.",
+                        t('status.verifying'),
                     );
             }
         } catch {
             setErrorMessage(
-                "Unable to verify the payment status. Please try again.",
+                t('errors.verify'),
             );
         } finally {
             setIsSubmitting(false);
@@ -140,7 +142,7 @@ export const PaymentForm = ({ paymentId }: PaymentFormProps) => {
                 type="submit"
                 disabled={!stripe || !elements || isSubmitting}
             >
-                {isSubmitting ? "Processing payment..." : "Pay now"}
+                {isSubmitting ? t('payment.processing') : t('payment.payNow')}
             </PaymentButton>
         </PaymentFormContainer>
     );

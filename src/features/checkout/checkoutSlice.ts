@@ -65,7 +65,7 @@ export const fetchPlans = createAsyncThunk<
       return rejectWithValue(error.message);
     }
 
-    return rejectWithValue("Не вдалося завантажити тарифні плани.");
+    return rejectWithValue("checkout.errors.loadPlans");
   }
 });
 
@@ -83,7 +83,7 @@ export const fetchStripeConfig = createAsyncThunk<
       return rejectWithValue(error.message);
     }
 
-    return rejectWithValue("Не вдалося завантажити налаштування Stripe.");
+    return rejectWithValue("checkout.errors.loadConfig");
   }
 });
 
@@ -107,7 +107,7 @@ export const createPayment = createAsyncThunk<
       return rejectWithValue(error.message);
     }
 
-    return rejectWithValue("Не вдалося створити платіж.");
+    return rejectWithValue("checkout.errors.createPayment");
   }
 });
 
@@ -124,7 +124,7 @@ export const fetchPaymentStatus = createAsyncThunk<
       return rejectWithValue(error.message);
     }
 
-    return rejectWithValue("Не вдалося перевірити статус платежу.");
+    return rejectWithValue("checkout.errors.verifyPayment");
   }
 });
 
@@ -208,7 +208,7 @@ const checkoutSlice = createSlice({
       .addCase(fetchPlans.rejected, (state, action) => {
         state.plansStatus = "failed";
         state.plansError =
-          action.payload ?? "Не вдалося завантажити тарифні плани.";
+          action.payload ?? "checkout.errors.loadPlans";
       })
 
       // Stripe config
@@ -224,7 +224,7 @@ const checkoutSlice = createSlice({
       .addCase(fetchStripeConfig.rejected, (state, action) => {
         state.configStatus = "failed";
         state.configError =
-          action.payload ?? "Не вдалося завантажити налаштування Stripe.";
+          action.payload ?? "checkout.errors.loadConfig";
       })
 
       // Create payment
@@ -256,7 +256,7 @@ const checkoutSlice = createSlice({
 
       .addCase(createPayment.rejected, (state, action) => {
         state.paymentStatus = "failed";
-        state.paymentError = action.payload ?? "Не вдалося створити платіж.";
+        state.paymentError = action.payload ?? "checkout.errors.createPayment";
       })
 
       // Retrieve payment status
@@ -276,7 +276,7 @@ const checkoutSlice = createSlice({
       .addCase(fetchPaymentStatus.rejected, (state, action) => {
         state.paymentStatusCheckStatus = "failed";
         state.paymentStatusCheckError =
-          action.payload ?? "Не вдалося перевірити статус платежу.";
+          action.payload ?? "checkout.errors.verifyPayment";
       });
   },
 });

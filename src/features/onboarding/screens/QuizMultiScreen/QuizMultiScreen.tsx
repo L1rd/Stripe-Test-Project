@@ -7,10 +7,13 @@ import { MULTI_QUESTION } from "../quizQuestions";
 import { useFlowNavigation } from "../../hooks/useFlowNavigation";
 import { setQuizAnswer } from "../../onboardingSlice";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { useTranslation } from "react-i18next";
 
 export function QuizMultiScreen() {
     const dispatch = useAppDispatch();
-
+    const { t: general } = useTranslation();
+    const { t: onboarding } = useTranslation('onboarding');
+    
     const savedAnswer = useAppSelector(
         (state) => state.onboarding.quizAnswers[MULTI_QUESTION.id]
     );
@@ -38,8 +41,8 @@ export function QuizMultiScreen() {
 
     return (
         <ScreenLayout
-            title={MULTI_QUESTION.title}
-            description={MULTI_QUESTION.description}
+            title={onboarding('quizMulti.title')}
+            description={onboarding('quizMulti.description')}
         >
             <ChoiceGroup
                 mode="multiple"
@@ -55,7 +58,7 @@ export function QuizMultiScreen() {
                 onClick={handleContinue}
                 style={{ marginTop: '30px' }}
             >
-                Continue
+                {general('common.continue')}
             </Button>
         </ScreenLayout>
     );
